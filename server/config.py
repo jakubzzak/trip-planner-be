@@ -2,44 +2,30 @@ from dotenv import load_dotenv
 import os
 from flask import Response, json, session
 
+from server.main.exceptions import UnauthorizedAccessException
+
 load_dotenv()
 
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    DATABASE_URI = os.environ.get('DATABASE_URI')
-    MAIL_SERVER = 'smtp.googlemail.com'
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
+    # DATABASE_URI = os.environ.get('DATABASE_URI')
+    MONGODB_SETTINGS = {
+        'host': os.environ.get('DATABASE_URI')
+    }
+
+    MAIL_SERVER = 'smtp.websupport.sk'
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
     MAIL_USERNAME = os.environ.get('EMAIL_USER')
     MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
+    MAIL_SENDER_NAME = os.environ.get('EMAIL_SENDER_NAME')
+    MAIL_OVERRIDE = os.environ.get('OVERRIDE_EMAIL')
+
     UNHANDLED_EXCEPTION_MESSAGE = os.environ.get('UNHANDLED_EXCEPTION_MESSAGE') \
         if os.environ.get('UNHANDLED_EXCEPTION_MESSAGE') is not None \
         else 'Ups! Unhandled exception occurred.'
-
-
-class UnauthorizedAccessException(Exception):
-
-    def __init__(self, message: str = None):
-        self.message = message if message is not None else 'Unauthorized access!'
-
-
-class InvalidRequestException(Exception):
-
-    def __init__(self, message: str = 'Invalid request!'):
-        self.message = message
-
-
-class RecordAlreadyExistsException(Exception):
-
-    def __init__(self, value: str = None):
-        self.message = f"Record with value {value} already exist!" if value is not None else f"Record already exist!"
-
-
-class RecordNotFoundException(Exception):
-
-    def __init__(self, value: str = None):
-        self.message = f"Record with value {value} does not exist!" if value is not None else f"Record does not exist!"
 
 
 class CustomResponse:
