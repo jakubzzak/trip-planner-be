@@ -1,6 +1,7 @@
 Trip planner - to make your trip planning a little bit more fun
 ==
-#[built in Flask, MongoDb and React]
+
+[built in Flask, MongoDb and React]
 
 ### create virtual environment
 
